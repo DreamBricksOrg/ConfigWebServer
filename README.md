@@ -5,7 +5,7 @@ ConfigWebServer is a simple Arduino library for the ESP32 that provides a web in
 ## Features
 
 - Create a small configuration portal accessible from a web browser
-- Supported variable types: `int`, `float`, and `bool`
+- Supported variable types: `int`, `float`, `bool`, and `unsigned long`
 - Values are saved in `/config.json` on the ESP32's SPIFFS filesystem
 - Minimal API that integrates with existing sketches
 
@@ -27,6 +27,7 @@ Copy this repository into your Arduino libraries folder or install it using the 
 int brightness = 75;
 float threshold = 2.5;
 bool enabled = true;
+unsigned long timeoutMs = 1000;
 ConfigWebServer configServer;
 
 void setup() {
@@ -37,6 +38,7 @@ void setup() {
     configServer.addVariable("brightness", "LED Brightness", &brightness, 0, 100);
     configServer.addVariable("threshold", "Sensor Threshold", &threshold, 0.0f, 5.0f);
     configServer.addVariable("enabled", "Feature Enabled", &enabled);
+    configServer.addVariable("timeout", "Timeout (ms)", &timeoutMs, 0UL, 60000UL);
 
     configServer.loadFromJSON();
 }
