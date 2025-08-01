@@ -1,6 +1,6 @@
 #include "ConfigWebServer.h"
 
-ConfigWebServer::ConfigWebServer() : server(80) {}
+ConfigWebServer::ConfigWebServer(bool debug_) : server(80), debug(debug_) {}
 
 void ConfigWebServer::begin(const String& title_) {
   title = title_;
@@ -95,27 +95,35 @@ void ConfigWebServer::saveToJSON() {
   if (f) {
     serializeJson(doc, f);
     f.close();
-    Serial.println("[SAVE] Config saved to /config.json");
+    if (debug) {
+      Serial.println("[SAVE] Config saved to /config.json");
 
-    // Print JSON to Serial for debugging
-    serializeJsonPretty(doc, Serial);
-    Serial.println();
+      // Print JSON to Serial for debugging
+      serializeJsonPretty(doc, Serial);
+      Serial.println();
+    }
 
   } else {
-    Serial.println("[ERROR] Failed to open /config.json for writing");
+    if (debug) {
+      Serial.println("[ERROR] Failed to open /config.json for writing");
+    }
   }
 }
 
 
 void ConfigWebServer::loadFromJSON() {
   if (!SPIFFS.exists("/config.json")) {
-    Serial.println("[LOAD] /config.json not found");
+    if (debug) {
+      Serial.println("[LOAD] /config.json not found");
+    }
     return;
   }
 
   File f = SPIFFS.open("/config.json", FILE_READ);
   if (!f) {
-    Serial.println("[ERROR] Failed to open /config.json for reading");
+    if (debug) {
+      Serial.println("[ERROR] Failed to open /config.json for reading");
+    }
     return;
   }
 
@@ -124,7 +132,9 @@ void ConfigWebServer::loadFromJSON() {
   f.close();
 
   if (err) {
-    Serial.println("[ERROR] JSON deserialization failed");
+    if (debug) {
+      Serial.println("[ERROR] JSON deserialization failed");
+    }
     return;
   }
 
@@ -140,5 +150,7 @@ void ConfigWebServer::loadFromJSON() {
     }
   }
 
-  Serial.println("[LOAD] Config loaded from /config.json");
+  if (debug) {
+    Serial.println("[LOAD] Config loaded from /config.json");
+  }
 }
