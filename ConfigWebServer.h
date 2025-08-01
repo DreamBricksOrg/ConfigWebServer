@@ -18,7 +18,7 @@ struct ConfigVar {
 
 class ConfigWebServer {
 public:
-  ConfigWebServer();
+  explicit ConfigWebServer(bool debug = false);
   void begin(const String& title = "ESP Config");
   void addVariable(const String& name, const String& label, int* ptr, int minVal, int maxVal);
   void addVariable(const String& name, const String& label, float* ptr, float minVal, float maxVal);
@@ -31,6 +31,7 @@ private:
   WebServer server;
   std::vector<ConfigVar> vars;
   String title;
+  bool debug;
   void handleRoot();
   void handleSave();
 };

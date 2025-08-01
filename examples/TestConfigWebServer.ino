@@ -5,7 +5,7 @@ int brightness = 75;
 float threshold = 2.5;
 bool enabled = true;
 unsigned long lastVarShown;
-ConfigWebServer configServer;
+ConfigWebServer configServer(true);
 
 void setup() {
   Serial.begin(115200);
